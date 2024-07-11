@@ -39,7 +39,7 @@ func NewReactor(evpool *Pool) *Reactor {
 	evR := &Reactor{
 		evpool: evpool,
 	}
-	evR.BaseReactor = *p2p.NewBaseReactor("Evidence", evR)
+	evR.BaseReactor = *p2p.NewBaseReactor("Evidence", evR, p2p.WithIncomingQueueSize(1))
 	return evR
 }
 
@@ -206,6 +206,10 @@ func (evR Reactor) prepareEvidenceMessage(
 
 	// send evidence
 	return []types.Evidence{ev}
+}
+
+func (evR *Reactor) OnStop() {
+	evR.BaseReactor.OnStop()
 }
 
 // PeerState describes the state of a peer.
